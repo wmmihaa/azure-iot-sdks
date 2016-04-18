@@ -37,7 +37,7 @@ if not %errorlevel%==0 exit /b %errorlevel%
 
 call %build-root%\..\..\build\release\release_mbed_project.cmd %build-root%\..\serializer\build
 if not %errorlevel%==0 exit /b %errorlevel%
-
+GOTO JUMP
 rem -----------------------------------------------------------------------------
 rem -- build iothub client samples
 rem -----------------------------------------------------------------------------
@@ -61,9 +61,9 @@ if not %errorlevel%==0 exit /b %errorlevel%
 rem -----------------------------------------------------------------------------
 rem -- build iothub longhaul tests (FOR NOW DON'T DO THIS)
 rem -----------------------------------------------------------------------------
-
-rem call :compile longhaul_tests %build-root%\tests\longhaul_tests\mbed
-rem if not %errorlevel%==0 exit /b %errorlevel%
+:JUMP
+call :compile longhaul_tests %build-root%\tests\longhaul_tests\mbed
+if not %errorlevel%==0 exit /b %errorlevel%
 
 goto:eof
 
