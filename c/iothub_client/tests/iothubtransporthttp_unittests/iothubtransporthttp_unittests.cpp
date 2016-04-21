@@ -124,6 +124,7 @@ static const IOTHUB_CLIENT_CONFIG TEST_CONFIG_IOTHUBCLIENT_CONFIG=
     HTTP_Protocol,                                  /* IOTHUB_CLIENT_TRANSPORT_PROVIDER protocol;   */
     TEST_DEVICE_ID,                                 /* const char* deviceId;                        */
     TEST_DEVICE_KEY,                                /* const char* deviceKey;                       */
+    NULL,                                           /* const char* deviceSasToken;                  */ 
     TEST_IOTHUB_NAME,                               /* const char* iotHubName;                      */
     TEST_IOTHUB_SUFFIX                              /* const char* iotHubSuffix;                    */
 };

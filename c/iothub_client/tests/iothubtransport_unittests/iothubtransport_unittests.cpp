@@ -96,6 +96,7 @@ static const IOTHUB_CLIENT_CONFIG TEST_CONFIG =
     provideFAKE,            /* IOTHUB_CLIENT_TRANSPORT_PROVIDER protocol;   */
     TEST_DEVICE_ID,         /* const char* deviceId;                        */
     TEST_DEVICE_KEY,        /* const char* deviceKey;                       */
+    NULL,                   /* const char* deviceSasToken                   */
     TEST_IOTHUBNAME,        /* const char* iotHubName;                      */
     TEST_IOTHUBSUFFIX,      /* const char* iotHubSuffix;                    */
 };
@@ -105,6 +106,7 @@ static const IOTHUB_CLIENT_CONFIG TEST_CONFIG_NULL_protocol =
     NULL,                   /* IOTHUB_CLIENT_TRANSPORT_PROVIDER protocol;   */
     TEST_DEVICE_ID,         /* const char* deviceId;                        */
     TEST_DEVICE_KEY,        /* const char* deviceKey;                       */
+    NULL,                   /* const char* deviceSasToken                   */
     TEST_IOTHUBNAME,        /* const char* iotHubName;                      */
     TEST_IOTHUBSUFFIX,      /* const char* iotHubSuffix;                    */
 };

@@ -102,6 +102,9 @@ typedef struct IOTHUB_CLIENT_CONFIG_TAG
     /** @brief	The device key used to authenticate the device. */
     const char* deviceKey;
 
+    /** @brief	The device SAS Token used to authenticate the device in place of device key. */
+    const char* deviceSasToken;
+
     /** @brief	The IoT Hub name to which the device is connecting. */
     const char* iotHubName;
     

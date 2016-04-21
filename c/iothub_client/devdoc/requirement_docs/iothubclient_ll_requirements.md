@@ -43,10 +43,12 @@ typedef struct IOTHUB_CLIENT_CONFIG_TAG
     IOTHUB_CLIENT_TRANSPORT_PROVIDER protocol;
     const char* deviceId;
     const char* deviceKey;
+    const char* deviceSasToken;
     const char* iotHubName;
     const char* iotHubSuffix;
     const char* protocolGatewayHostName;
 } IOTHUB_CLIENT_CONFIG;
+
 typedef struct IOTHUB_CLIENT_DEVICE_CONFIG_TAG
 {
 	IOTHUB_CLIENT_TRANSPORT_PROVIDER protocol;
@@ -82,11 +84,11 @@ extern IOTHUB_CLIENT_HANDLE IoTHubClient_LL_CreateFromConnectionString(const cha
 **SRS_IOTHUBCLIENT_LL_12_012: [**If the allocation failed IoTHubClient_LL_CreateFromConnectionString  returns NULL.**]**  
 **SRS_IOTHUBCLIENT_LL_12_005: [**IoTHubClient_LL_CreateFromConnectionString shall try to parse the connectionString input parameter for the following structure: "Key1=value1;key2=value2;key3=value3..."**]** 
 **SRS_IOTHUBCLIENT_LL_12_013: [**If the parsing failed IoTHubClient_LL_CreateFromConnectionString returns NULL**]**  
-**SRS_IOTHUBCLIENT_LL_12_006: [**IoTHubClient_LL_CreateFromConnectionString shall verify the existence of the following Key/Value pairs in the connection string: HostName, DeviceId, SharedAccessKey.**]**  
+**SRS_IOTHUBCLIENT_LL_12_006: [**IoTHubClient_LL_CreateFromConnectionString shall verify the existence of the following Key/Value pairs in the connection string: HostName, DeviceId, SharedAccessKey or SharedAccessSignature.**]**  
 **SRS_IOTHUBCLIENT_LL_12_014: [**If either of key is missing then IoTHubClient_LL_CreateFromConnectionString returns NULL **]** 
 **SRS_IOTHUBCLIENT_LL_12_009: [**IoTHubClient_LL_CreateFromConnectionString shall split the value of HostName to Name and Suffix using the first "." as a separator**]** 
 **SRS_IOTHUBCLIENT_LL_12_015: [**If the string split failed, IoTHubClient_LL_CreateFromConnectionString returns NULL **]** 
-**SRS_IOTHUBCLIENT_LL_12_010: [**IoTHubClient_LL_CreateFromConnectionString shall fill up the IOTHUB_CLIENT_CONFIG structure using the following mapping: iotHubName = Name, iotHubSuffix = Suffix, deviceId = DeviceId, deviceKey = SharedAccessKey**]** 
+**SRS_IOTHUBCLIENT_LL_12_010: [**IoTHubClient_LL_CreateFromConnectionString shall fill up the IOTHUB_CLIENT_CONFIG structure using the following mapping: iotHubName = Name, iotHubSuffix = Suffix, deviceId = DeviceId, deviceKey = SharedAccessKey or deviceSasToken = SharedAccessSignature**]** 
 **SRS_IOTHUBCLIENT_LL_12_011: [**IoTHubClient_LL_CreateFromConnectionString shall call into the IoTHubClient_LL_Create API with the current structure and returns with the return value of it**]** 
 **SRS_IOTHUBCLIENT_LL_12_016: [**IoTHubClient_LL_CreateFromConnectionString shall return NULL if IoTHubClient_LL_Create call fails**]** 
 **SRS_IOTHUBCLIENT_LL_04_001: [**IoTHubClient_LL_CreateFromConnectionString shall verify the existence of key/value pair GatewayHostName. If it does exist it shall pass the value to IoTHubClient_LL_Create API.**]** 

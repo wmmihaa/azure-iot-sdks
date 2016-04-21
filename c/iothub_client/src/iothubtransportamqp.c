@@ -997,9 +997,9 @@ static TRANSPORT_LL_HANDLE IoTHubTransportAMQP_Create(const IOTHUBTRANSPORT_CONF
     {
         LogError("Invalid configuration (NULL deviceId detected)\r\n");
     }
-    else if (config->upperConfig->deviceKey == NULL)
+    else if (config->upperConfig->deviceKey == NULL && config->upperConfig->deviceSasToken == NULL)
     {
-        LogError("Invalid configuration (NULL deviceKey detected)\r\n");
+        LogError("Invalid configuration (NULL deviceKey/deviceSasToken detected)\r\n");
     }
     else if (config->upperConfig->iotHubName == NULL)
     {
@@ -1015,11 +1015,18 @@ static TRANSPORT_LL_HANDLE IoTHubTransportAMQP_Create(const IOTHUBTRANSPORT_CONF
     }
     // Codes_SRS_IOTHUBTRANSPORTAMQP_09_008: [IoTHubTransportAMQP_Create shall fail and return NULL if any config field of type string is zero length.] 
     else if ((deviceIdLength = strlen(config->upperConfig->deviceId)) == 0 ||
-        (strlen(config->upperConfig->deviceKey) == 0) ||
         (strlen(config->upperConfig->iotHubName) == 0) ||
         (strlen(config->upperConfig->iotHubSuffix) == 0))
     {
-        LogError("Zero-length config parameter (deviceId, deviceKey, iotHubName or iotHubSuffix)\r\n");
+        LogError("Zero-length config parameter (deviceId, iotHubName or iotHubSuffix)\r\n");
+    }
+    else if ( (config->upperConfig->deviceKey != NULL) && (strlen(config->upperConfig->deviceKey) == 0) )
+    {
+        LogError("Zero-length config parameter (deviceKey)\r\n");
+    }
+    else if ( (config->upperConfig->deviceSasToken != NULL) && (strlen(config->upperConfig->deviceSasToken) == 0) )
+    {
+        LogError("Zero-length config parameter (deviceSasToken)\r\n");
     }
     // Codes_SRS_IOTHUBTRANSPORTAMQP_09_007: [IoTHubTransportAMQP_Create shall fail and return NULL if the deviceId length is greater than 128.]
     else if (deviceIdLength > 128U)

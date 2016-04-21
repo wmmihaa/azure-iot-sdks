@@ -39,6 +39,7 @@ typedef struct IOTHUB_CLIENT_LL_HANDLE_DATA_TAG
 static const char HOSTNAME_TOKEN[] = "HostName";
 static const char DEVICEID_TOKEN[] = "DeviceId";
 static const char DEVICEKEY_TOKEN[] = "SharedAccessKey";
+static const char DEVICESAS_TOKEN[] = "SharedAccessSignature";
 static const char PROTOCOL_GATEWAY_HOST[] = "GatewayHostName";
 
 IOTHUB_CLIENT_LL_HANDLE IoTHubClient_LL_CreateFromConnectionString(const char* connectionString, IOTHUB_CLIENT_TRANSPORT_PROVIDER protocol)
@@ -78,6 +79,7 @@ IOTHUB_CLIENT_LL_HANDLE IoTHubClient_LL_CreateFromConnectionString(const char* c
             STRING_HANDLE hostSuffixString = NULL;
             STRING_HANDLE deviceIdString = NULL;
             STRING_HANDLE deviceKeyString = NULL;
+            STRING_HANDLE deviceSasTokenString = NULL;
             STRING_HANDLE protocolGateway = NULL;
 
             config->protocol = protocol;
@@ -86,6 +88,8 @@ IOTHUB_CLIENT_LL_HANDLE IoTHubClient_LL_CreateFromConnectionString(const char* c
             config->iotHubSuffix = NULL;
             config->deviceId = NULL;
             config->deviceKey = NULL;
+            config->deviceSasToken = NULL;
+
             /* Codes_SRS_IOTHUBCLIENT_LL_04_002: [If it does not, it shall pass the protocolGatewayHostName NULL.] */
             config->protocolGatewayHostName = NULL;
 
@@ -114,7 +118,7 @@ IOTHUB_CLIENT_LL_HANDLE IoTHubClient_LL_CreateFromConnectionString(const char* c
                 LogError("Error creating HostSuffix String\r\n");
             }
             /* SRS_IOTHUBCLIENT_LL_12_005: [IoTHubClient_LL_CreateFromConnectionString shall try to parse the connectionString input parameter for the following structure: "Key1=value1;key2=value2;key3=value3..."] */
-            /* SRS_IOTHUBCLIENT_LL_12_006: [IoTHubClient_LL_CreateFromConnectionString shall verify the existence of the following Key/Value pairs in the connection string: HostName, DeviceId, SharedAccessKey.]  */
+            /* SRS_IOTHUBCLIENT_LL_12_006: [IoTHubClient_LL_CreateFromConnectionString shall verify the existence of the following Key/Value pairs in the connection string: HostName, DeviceId, SharedAccessKey or SharedAccessSignature.]  */
             else
             {
                 while ((STRING_TOKENIZER_get_next_token(tokenizer1, tokenString, "=") == 0))
@@ -128,7 +132,7 @@ IOTHUB_CLIENT_LL_HANDLE IoTHubClient_LL_CreateFromConnectionString(const char* c
                     {
                         if (tokenString != NULL)
                         {
-                            /* SRS_IOTHUBCLIENT_LL_12_010: [IoTHubClient_LL_CreateFromConnectionString shall fill up the IOTHUB_CLIENT_CONFIG structure using the following mapping: iotHubName = Name, iotHubSuffix = Suffix, deviceId = DeviceId, deviceKey = SharedAccessKey] */
+                            /* SRS_IOTHUBCLIENT_LL_12_010: [IoTHubClient_LL_CreateFromConnectionString shall fill up the IOTHUB_CLIENT_CONFIG structure using the following mapping: iotHubName = Name, iotHubSuffix = Suffix, deviceId = DeviceId, deviceKey = SharedAccessKey or deviceSasToken = SharedAccessSignature] */
                             const char* s_token = STRING_c_str(tokenString);
                             if (strcmp(s_token, HOSTNAME_TOKEN) == 0)
                             {
@@ -181,6 +185,14 @@ IOTHUB_CLIENT_LL_HANDLE IoTHubClient_LL_CreateFromConnectionString(const char* c
                                     config->deviceKey = STRING_c_str(deviceKeyString);
                                 }
                             }
+                            else if (strcmp(s_token, DEVICESAS_TOKEN) == 0)
+                            {
+                                deviceSasTokenString = STRING_clone(valueString);
+                                if (deviceSasTokenString != NULL)
+                                {
+                                    config->deviceSasToken = STRING_c_str(deviceSasTokenString);
+                                }
+                            }
                             /* Codes_SRS_IOTHUBCLIENT_LL_04_001: [IoTHubClient_LL_CreateFromConnectionString shall verify the existence of key/value pair GatewayHostName. If it does exist it shall pass the value to IoTHubClient_LL_Create API.] */
                             else if (strcmp(s_token, PROTOCOL_GATEWAY_HOST) == 0)
                             {
@@ -206,9 +218,9 @@ IOTHUB_CLIENT_LL_HANDLE IoTHubClient_LL_CreateFromConnectionString(const char* c
                 {
                     LogError("deviceId is not found\r\n");
                 }
-                else if (config->deviceKey == NULL)
+                else if (config->deviceKey == NULL && config->deviceSasToken == NULL)
                 {
-                    LogError("deviceId is not found\r\n");
+                    LogError("deviceKey/deviceSasToken not found\r\n");
                 }
                 else
                 {
@@ -220,6 +232,8 @@ IOTHUB_CLIENT_LL_HANDLE IoTHubClient_LL_CreateFromConnectionString(const char* c
                     }
                 }
             }
+            if (deviceSasTokenString != NULL)
+                STRING_delete(deviceSasTokenString);
             if (deviceKeyString != NULL)
                 STRING_delete(deviceKeyString);
             if (deviceIdString != NULL)
