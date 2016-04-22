@@ -403,7 +403,7 @@ BEGIN_TEST_SUITE(iothubclient_mqtt_e2etests)
 
         IoTHubTest_Deinit(iotHubTestHandle);
 
-        LogInfo("IoTHub_MQTT_RecvMessage_E2ETest Message recv started.\r\n");
+        LogInfo("IoTHub_MQTT_RecvMessage_E2ETest Message recv started.");
 
         time_t beginOperation, nowTime;
         beginOperation = time(NULL);
@@ -435,11 +435,11 @@ BEGIN_TEST_SUITE(iothubclient_mqtt_e2etests)
         // Temporary code till debug
         if (!notifyData->wasFound)
         {
-            LogError("IoTHub_MQTT_RecvMessage_E2ETest message was not found.\r\n");
+            LogError("IoTHub_MQTT_RecvMessage_E2ETest message was not found.");
         }
         else
         {
-            LogInfo("IoTHub_MQTT_RecvMessage_E2ETest message was successful.\r\n");
+            LogInfo("IoTHub_MQTT_RecvMessage_E2ETest message was successful.");
         }
 
         // cleanup
